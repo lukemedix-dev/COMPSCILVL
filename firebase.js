@@ -17,13 +17,13 @@ import {
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCUD7Ur8Xpq79y1UF0jYGinfypY7NIorEg",
-    authDomain: "compscileveling.firebaseapp.com",
-    projectId: "compscileveling",
-    storageBucket: "compscileveling.firebasestorage.app",
-    messagingSenderId: "806148574323",
-    appId: "1:806148574323:web:585d7704db0a6cb778ae06",
-    measurementId: "G-MKNXGJ9LQS"
+  apiKey: "AIzaSyBFzjlcsksXYCdYpytUd-WpBT3XwTi9Pic",
+  authDomain: "compscilevel.firebaseapp.com",
+  projectId: "compscilevel",
+  storageBucket: "compscilevel.firebasestorage.app",
+  messagingSenderId: "687287366740",
+  appId: "1:687287366740:web:b1e35b370be4952abbe9c1",
+  measurementId: "G-NVGGES4RJ4"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -58,14 +58,20 @@ loadSession();
 // ─────────────────────────────────────────────
 async function saveProgress() {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+        console.warn('No user logged in, cannot save progress');
+        return;
+    }
     try {
         // store the full state object so we can restore everything even after logout/refresh
+        console.log('Saving progress for user:', user.uid);
         await setDoc(doc(db, 'progress', user.uid), {
-            state
+            state,
+            lastSaved: new Date().toISOString()
         });
+        console.log('Progress saved successfully');
     } catch (e) {
-        console.error('Save failed:', e);
+        console.error('❌ Save failed:', e.message, e.code);
     }
     // keep a local copy as well for fast reloads
     saveSession();
@@ -74,9 +80,11 @@ async function saveProgress() {
 
 async function loadProgress(uid) {
     try {
+        console.log('Loading progress for user:', uid);
         const snap = await getDoc(doc(db, 'progress', uid));
         if (snap.exists()) {
             const data = snap.data();
+            console.log('✓ Progress loaded from Firebase:', data);
             // merge entire saved state if available, otherwise fall back to old fields
             if (data.state) {
                 Object.assign(state, data.state);
@@ -85,9 +93,11 @@ async function loadProgress(uid) {
                 state.expStorage = data.expStorage || { html: 0, js: 0 };
                 state.completed  = data.completed  || [];
             }
+        } else {
+            console.log('No saved progress found for this user (first login?)');
         }
     } catch (e) {
-        console.error('Load failed:', e);
+        console.error('❌ Load failed:', e.message, e.code);
     }
 }
 
@@ -145,8 +155,10 @@ function register() {
         .catch(err => alert(err.message));
 }
 
-function logout() {
-    signOut(auth);
+async function logout() {
+    console.log('Logout: Saving progress before signing out...');
+    await saveProgress(); // ← wait for save to complete!
+    await signOut(auth);
 }
 
 
